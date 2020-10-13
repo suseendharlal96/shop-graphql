@@ -3,10 +3,12 @@ const mongoose = require("mongoose");
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
+const auth = require("./util/auth");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: auth,
 });
 
 const PORT = process.env.port || 5000;

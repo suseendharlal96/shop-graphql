@@ -6,10 +6,8 @@ const resolvers = {
     ...productResolver.Query,
     ...userResolver.Query,
   },
-  Product: {
-    ...productResolver.Product,
-  },
   Mutation: {
+    ...productResolver.Mutation,
     ...userResolver.Mutation,
   },
 };

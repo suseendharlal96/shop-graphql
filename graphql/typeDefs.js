@@ -4,7 +4,10 @@ const typeDefs = gql`
   type Product {
     id: String!
     name: String!
-    owner: Owner!
+    price: Int!
+    image: String!
+    description: String!
+    creator: ID!
   }
 
   type User {
@@ -24,6 +27,23 @@ const typeDefs = gql`
 
   type Mutation {
     signup(email: String!, password: String!, confirmPassword: String!): User!
+
+    addProduct(
+      name: String!
+      price: Int!
+      image: String!
+      description: String!
+    ): Product!
+
+    updateProduct(
+      id: ID!
+      name: String!
+      price: Int!
+      image: String!
+      description: String!
+    ): Product!
+
+    deleteProduct(id: ID!): String!
   }
 `;
 
