@@ -1,6 +1,7 @@
 const { AuthenticationError, UserInputError } = require("apollo-server");
 
 const Product = require("../model/Product");
+const Cart = require("../model/Cart");
 
 const validateProduct = (name, price, image, description) => {
   if (name === "") {
@@ -58,7 +59,7 @@ module.exports = {
       const product = await Product.findById(id);
       if (product) {
         if (product.creator == loggedUser.id) {
-          await Product.update(
+          await Product.updateOne(
             { _id: id },
             {
               $set: {
@@ -70,7 +71,7 @@ module.exports = {
             }
           );
           const result = await Product.findById(id);
-          return { ...result._doc, id: result.id };
+          return result;
         } else {
           throw new AuthenticationError("Unauthorized", {
             error: "Unauthorized to perform action",
