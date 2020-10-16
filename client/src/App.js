@@ -6,11 +6,11 @@ import Auth from "./pages/Auth";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
-function App() {
+const App = (props) => {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar {...props} />
         <div className="container">
           <Switch>
             <Route path="/" exact component={Products} />
@@ -21,6 +21,6 @@ function App() {
       </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;

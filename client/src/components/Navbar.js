@@ -1,5 +1,5 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as actions from "../store/actions/index";
@@ -7,27 +7,65 @@ import "./Navbar.scss";
 
 const Navbar = (props) => {
   const history = useHistory();
+  const location = useLocation();
+  const [showLink, setshowLink] = useState(false);
   const navigate = (path, isLogout = false) => {
     if (isLogout) {
       props.logout();
     }
+    setshowLink(false);
     history.push(path);
+  };
+
+  const toggle = () => {
+    setshowLink(!showLink);
   };
 
   return (
     <nav className="navbar">
       <div className="brand">ReactKart</div>
-      <div className="nav-links">
+      <a className="toggle" onClick={toggle}>
+        <span className="bar"></span>
+        <span className="bar"></span>
+        <span className="bar"></span>
+      </a>
+      <div className={showLink ? "nav-links active" : "nav-links"}>
         <ul>
-          <li onClick={() => navigate("/")}>Home</li>
+          <li
+            className={location.pathname === "/" ? "active" : ""}
+            onClick={() => navigate("/")}
+          >
+            Home
+          </li>
           {props.email ? (
             <>
-              <li onClick={() => navigate("/")}>Cart</li>
-              <li onClick={() => navigate("/")}>Orders</li>
-              <li onClick={() => navigate("/auth", true)}>Logout</li>
+              <li
+                className={location.pathname === "/cart" ? "active" : ""}
+                onClick={() => navigate("/")}
+              >
+                Cart
+              </li>
+              <li
+                className={location.pathname === "/orders" ? "active" : ""}
+                onClick={() => navigate("/")}
+              >
+                Orders
+              </li>
+              <li
+                className={location.pathname === "/auth" ? "active" : ""}
+                onClick={() => navigate("/auth", true)}
+              >
+                Logout
+              </li>
+              <li className="email">{props.email}</li>
             </>
           ) : (
-            <li onClick={() => navigate("/auth")}>Signin/Signup</li>
+            <li
+              className={location.pathname === "/auth" ? "active" : ""}
+              onClick={() => navigate("/auth")}
+            >
+              Signin/Signup
+            </li>
           )}
         </ul>
       </div>

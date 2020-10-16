@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 import "./Product.scss";
 
-const Product = ({ product, sampleFunc }) => {
-  const [val, setVal] = useState(1);
+const Product = ({ product }) => {
   return (
     <div className="product-container">
       <h2>{product.name}</h2>
       <p className="price">{product.price}</p>
-      <img src={product.image} />
+      <img alt={product.name} src={product.image} />
       <p>{product.description}</p>
       {/* <div class="btn-container" *ngIf="token !== ''">
           <button

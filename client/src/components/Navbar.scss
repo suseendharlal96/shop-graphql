@@ -26,16 +26,13 @@
   background-color: #00ffb4;
   color: #000000;
 }
-.navbar li.active:hover {
-  background-color: #555;
-  color: #ffffff;
-}
 .navbar .email {
   color: #dcdf25;
 }
 .navbar li:not(.email):hover {
   background-color: #555;
   cursor: pointer;
+  color: #ffffff;
 }
 .toggle {
   position: absolute;
@@ -46,6 +43,7 @@
   justify-content: space-between;
   width: 30px;
   height: 20px;
+  cursor: pointer;
 }
 .toggle .bar {
   height: 3px;
@@ -72,6 +70,7 @@
   .navbar ul {
     flex-direction: column;
     width: 100%;
+    text-align: center;
   }
 }
 .auth-container {

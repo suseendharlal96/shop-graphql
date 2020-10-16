@@ -100,6 +100,7 @@ const Products = (props) => {
                         length: props.paginationInfo.totalPages,
                       }).map((_, index) => (
                         <button
+                          key={index}
                           disabled={activePage === index + 1}
                           className="btn-page"
                           onClick={() => activePageHandler(index + 1)}
