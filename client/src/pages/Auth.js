@@ -1,0 +1,177 @@
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+
+import { useLazyQuery, useMutation, gql } from "@apollo/client";
+
+import "./Auth.scss";
+import { authFragment } from "../util/authFragment";
+import * as actions from "../store/actions/index";
+
+const Auth = (props) => {
+  const [isSignup, setisSignup] = useState(false);
+  const [form, setform] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({});
+  const history = useHistory();
+
+  const changeMode = () => {
+    if (form.confirmPassword !== "") {
+      setform({ ...form, confirmPassword: "" });
+    }
+    setErrors({});
+    setisSignup(!isSignup);
+  };
+
+  const handleInputChange = (e) => {
+    setform({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const [login, { loading }] = useLazyQuery(SIGN_IN, {
+    onCompleted(data) {
+      console.log(data);
+      history.push("/");
+      props.storeToken(data.signin.email, data.signin.token);
+    },
+    onError(err) {
+      console.log(err.graphQLErrors);
+    },
+  });
+
+  const [signup, { loading: signupLoading }] = useMutation(SIGN_UP, {
+    onCompleted(data) {
+      console.log(data);
+      history.push("/");
+      props.storeToken(data.signup.email, data.signup.token);
+    },
+    onError(err) {
+      console.log(err.graphQLErrors[0].extensions.errors);
+      setErrors(err.graphQLErrors[0].extensions.errors);
+    },
+  });
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (!isSignup) {
+      login({ variables: form });
+    } else {
+      signup({ variables: form });
+    }
+  };
+
+  return (
+    <div className="auth-form">
+      <h2>{isSignup ? "Signup" : "Signin"}</h2>
+      <form onSubmit={submitForm}>
+        <div>
+          <label htmlFor="email" required>
+            Email
+          </label>
+          <input
+            type="text"
+            name="email"
+            autoFocus
+            className="form-control"
+            value={form.email}
+            id="email"
+            onChange={handleInputChange}
+          />
+        </div>
+        {errors.email && <p className="invalid">{errors.email}</p>}
+        <div>
+          <label htmlFor="password" required>
+            Password
+          </label>
+          <input
+            className="form-control"
+            type="password"
+            name="password"
+            id="password"
+            value={form.password}
+            onChange={handleInputChange}
+          />
+        </div>
+        {errors.password && <p className="invalid">{errors.password}</p>}
+        {isSignup && (
+          <>
+            <div>
+              <label htmlFor="confirmPassword" required>
+                Confirm Password
+              </label>
+              <input
+                className="form-control"
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleInputChange}
+              />
+            </div>
+            {errors.confirmPassword && (
+              <p className="invalid">{errors.confirmPassword}</p>
+            )}
+          </>
+        )}
+        {/* <p v-if="errors && errors.error" className="invalid">
+        { isSignup ? errors.error : "Invalid credentials" }
+      </p> */}
+        <button
+          className="auth-button secondary"
+          type="button"
+          disabled={loading}
+          onClick={changeMode}
+        >
+          Switch to {isSignup ? "Signin" : "Signup"}
+        </button>
+        <button className="auth-button primary" type="submit">
+          {isSignup
+            ? signupLoading
+              ? "Signing up.."
+              : "Signup"
+            : loading
+            ? "Signing in.."
+            : "Signin"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+const SIGN_IN = gql`
+  query signIn($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
+      ...authData
+    }
+  }
+  ${authFragment}
+`;
+
+const SIGN_UP = gql`
+  mutation signUp(
+    $email: String!
+    $password: String!
+    $confirmPassword: String!
+  ) {
+    signup(
+      email: $email
+      password: $password
+      confirmPassword: $confirmPassword
+    ) {
+      ...authData
+    }
+  }
+  ${authFragment}
+`;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeToken: (email, token) => {
+      dispatch(actions.storeToken(email, token));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Auth);

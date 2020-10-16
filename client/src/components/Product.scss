@@ -1,0 +1,59 @@
+.product-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 325px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    box-shadow: 2px 3px;
+    padding: 5px;
+    margin: 0 20px 20px 0px;
+  }
+  p {
+    margin: 0;
+  }
+  .price::before {
+    content: "₹";
+  }
+  img {
+    height: 300px;
+    width: 300px;
+  }
+  .btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 90%;
+    margin-top: 15px;
+  }
+  button {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 5px;
+    &.btn-delete {
+      background-color: rgba($color: #ff0000, $alpha: 1);
+      color: #ffffff;
+    }
+    &.btn-delete:hover {
+      background-color: rgba($color: #3a0606, $alpha: 1);
+      color: #ffffff;
+    }
+    &.btn-edit {
+      background-color: rgba($color: #0000ff, $alpha: 1);
+      color: #ffffff;
+    }
+    &.btn-edit:hover {
+      background-color: rgba($color: #050533, $alpha: 1);
+      color: #ffffff;
+    }
+    &.btn-cart {
+      background-color: rgba($color: #00ff00, $alpha: 1);
+      color: #ffffff;
+    }
+    &.btn-cart:hover {
+      background-color: rgba($color: #053605, $alpha: 1);
+      color: #ffffff;
+    }
+  }

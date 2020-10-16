@@ -2,17 +2,20 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import logger from "redux-logger";
 
 import "./index.css";
 import productReducer from "./store/reducers/product";
+import authReducer from "./store/reducers/auth";
 import ApolloProvider from "./ApolloProvider";
 
 const rootReducer = combineReducers({
+  authReducer,
   productReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(logger));
 
 ReactDOM.render(
   <React.StrictMode>

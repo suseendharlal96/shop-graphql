@@ -1,5 +1,7 @@
 const { ApolloServer } = require("apollo-server");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
@@ -10,14 +12,10 @@ const server = new ApolloServer({
   resolvers,
   context: auth,
 });
-
 const PORT = process.env.port || 5000;
-
+const mongo = process.env.MONGO_CONFIG;
 mongoose
-  .connect(
-    "mongodb+srv://suseendhar:susee123@cluster0.iwva7.mongodb.net/shop-graphql?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
+  .connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("mongoose connected");
     return server.listen({ port: PORT });

@@ -1,6 +1,11 @@
 const { gql } = require("apollo-server");
 
 const typeDefs = gql`
+  type ProductData {
+    products: [Product]!
+    paginationInfo: Pagination!
+  }
+
   type Product {
     _id: String!
     name: String!
@@ -9,6 +14,12 @@ const typeDefs = gql`
     description: String!
     creator: ID!
     quantity: Int
+  }
+
+  type Pagination {
+    prevPage: Int
+    nextPage: Int
+    totalPages: Int!
   }
 
   type User {
@@ -28,7 +39,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getProducts: [Product!]!
+    getProducts(page: Int!, limit: Int!): ProductData!
     signin(email: String!, password: String!): User!
     getCart: [Cart]
   }

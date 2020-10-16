@@ -6,3 +6,10 @@ export const storeProducts = (products) => {
     products,
   };
 };
+
+export const storePaginationInfo = (data) => {
+  return {
+    type: actionType.STORE_PAGINATION,
+    paginationInfo: data,
+  };
+};

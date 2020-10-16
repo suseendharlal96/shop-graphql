@@ -18,10 +18,30 @@ const validateProduct = (name, price, image, description) => {
   }
 };
 
+let paginationInfo;
+
 module.exports = {
   Query: {
-    getProducts: async () => {
-      return await Product.find();
+    getProducts: async (_, { page, limit }) => {
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      let allProducts = await Product.find();
+      let products;
+      if (startIndex < allProducts.length) {
+        products = await Product.find().limit(limit).skip(startIndex);
+      } else {
+        products = [...allProducts];
+      }
+      const paginationInfo = {};
+      paginationInfo.totalPages = Math.ceil(allProducts.length / limit);
+      if (endIndex < allProducts.length) {
+        paginationInfo.nextPage = page + 1;
+      }
+      if (startIndex !== 0) {
+        paginationInfo.prevPage = page - 1;
+      }
+      console.log(paginationInfo);
+      return { products, paginationInfo };
     },
   },
   Mutation: {

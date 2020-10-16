@@ -8,6 +8,9 @@ const resolvers = {
     ...userResolver.Query,
     ...cartResolver.Query,
   },
+  // Product: {
+  //   ...productResolver.Product,
+  // },
   Mutation: {
     ...productResolver.Mutation,
     ...userResolver.Mutation,
