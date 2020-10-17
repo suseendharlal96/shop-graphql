@@ -8,12 +8,10 @@ import {
 
 import App from "./App";
 
-const token = localStorage.getItem("token");
-
 const httpLink = createHttpLink({
   uri: "http://localhost:5000",
   headers: {
-    authorization: token ? `Bearer ${token}` : "",
+    authorization: `Bearer ${localStorage.getItem("token")}` || "",
   },
 });
 

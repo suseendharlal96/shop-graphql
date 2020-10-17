@@ -6,18 +6,18 @@ import Auth from "./pages/Auth";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
-const App = (props) => {
+const App = () => {
   return (
     <>
       <BrowserRouter>
-        <Navbar {...props} />
-        <div className="container">
-          <Switch>
-            <Route path="/" exact component={Products} />
-            <Route path="/auth" component={Auth} />
-            <Redirect from="**" to="/" />
-          </Switch>
-        </div>
+        <Navbar />
+        <Switch>
+          <Route path="/" exact component={Products} />
+          <Route path="/auth" component={Auth} />
+          <Route path="/delete-product/:id" component={Products} />
+          <Route path="/edit-product/:id" component={Products} />
+          <Redirect from="**" to="/" />
+        </Switch>
       </BrowserRouter>
     </>
   );

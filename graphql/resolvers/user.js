@@ -1,6 +1,8 @@
 const { AuthenticationError } = require("apollo-server");
 const jwt = require("jsonwebtoken");
 const bcrpyt = require("bcrypt");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const validate = require("../../util/validation");
 const User = require("../model/User");
@@ -29,7 +31,7 @@ module.exports = {
           email: oldUser.email,
           password: oldUser.password,
         },
-        "SECRET_SHOP",
+        process.env.SECRET_KEY,
         { expiresIn: "1h" }
       );
       return { ...oldUser._doc, id: oldUser.id, token };
@@ -57,7 +59,7 @@ module.exports = {
           email: user.email,
           password: user.password,
         },
-        "SECRET_SHOP",
+        process.env.SECRET_KEY,
         { expiresIn: "1h" }
       );
       return { ...user._doc, id: user.id, token };

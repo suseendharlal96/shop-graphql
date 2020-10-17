@@ -32,7 +32,13 @@ const Navbar = (props) => {
       <div className={showLink ? "nav-links active" : "nav-links"}>
         <ul>
           <li
-            className={location.pathname === "/" ? "active" : ""}
+            className={
+              location.pathname === "/" ||
+              location.pathname.search("/delete") !== -1 ||
+              location.pathname.search("/edit") !== -1
+                ? "active"
+                : ""
+            }
             onClick={() => navigate("/")}
           >
             Home

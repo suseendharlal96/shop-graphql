@@ -1,59 +1,65 @@
 .product-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 325px;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    box-shadow: 2px 3px;
-    padding: 5px;
-    margin: 0 20px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 325px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-shadow: 2px 3px;
+  padding: 5px;
+  margin: 0 20px 20px 0px;
+}
+p {
+  margin: 0;
+}
+.price::before {
+  content: "₹";
+}
+img {
+  height: 300px;
+  width: 300px;
+}
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 90%;
+  margin-top: 15px;
+}
+button {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+  &.btn-delete {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
   }
-  p {
-    margin: 0;
+  &.btn-delete:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
   }
-  .price::before {
-    content: "₹";
+  &.btn-edit {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
   }
-  img {
-    height: 300px;
-    width: 300px;
+  &.btn-edit:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
   }
-  .btn-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    width: 90%;
-    margin-top: 15px;
+  &.btn-cart {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
   }
-  button {
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 5px;
-    &.btn-delete {
-      background-color: rgba($color: #ff0000, $alpha: 1);
-      color: #ffffff;
-    }
-    &.btn-delete:hover {
-      background-color: rgba($color: #3a0606, $alpha: 1);
-      color: #ffffff;
-    }
-    &.btn-edit {
-      background-color: rgba($color: #0000ff, $alpha: 1);
-      color: #ffffff;
-    }
-    &.btn-edit:hover {
-      background-color: rgba($color: #050533, $alpha: 1);
-      color: #ffffff;
-    }
-    &.btn-cart {
-      background-color: rgba($color: #00ff00, $alpha: 1);
-      color: #ffffff;
-    }
-    &.btn-cart:hover {
-      background-color: rgba($color: #053605, $alpha: 1);
-      color: #ffffff;
-    }
+  &.btn-cart:hover {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
   }
+}

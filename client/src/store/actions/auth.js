@@ -1,10 +1,9 @@
 import * as actionType from "./actionType";
 
-export const storeToken = (email, token) => {
+export const storeAuthData = (authData) => {
   return {
-    type: actionType.STORE_TOKEN,
-    token,
-    email,
+    type: actionType.STORE_AUTHDATA,
+    authData
   };
 };
 

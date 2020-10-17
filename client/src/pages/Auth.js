@@ -34,7 +34,7 @@ const Auth = (props) => {
     onCompleted(data) {
       console.log(data);
       history.push("/");
-      props.storeToken(data.signin.email, data.signin.token);
+      props.storeAuthData(data.signin);
     },
     onError(err) {
       console.log(err.graphQLErrors);
@@ -45,7 +45,7 @@ const Auth = (props) => {
     onCompleted(data) {
       console.log(data);
       history.push("/");
-      props.storeToken(data.signup.email, data.signup.token);
+      props.storeAuthData(data.signup);
     },
     onError(err) {
       console.log(err.graphQLErrors[0].extensions.errors);
@@ -168,8 +168,8 @@ const SIGN_UP = gql`
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    storeToken: (email, token) => {
-      dispatch(actions.storeToken(email, token));
+    storeAuthData: (authData) => {
+      dispatch(actions.storeAuthData(authData));
     },
   };
 };

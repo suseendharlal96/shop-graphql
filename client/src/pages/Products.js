@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-import { useQuery, gql } from "@apollo/client";
+import { useLazyQuery, gql } from "@apollo/client";
 
 import * as action from "../store/actions/index";
 import Product from "../components/Product";
+import ProductCreation from "../components/ProductCreation";
 import { productFragment } from "../util/productFragment";
 import "./Products.scss";
 
 const Products = (props) => {
   const [activePage, setActivePage] = useState(1);
   const [limit, setLimit] = useState(2);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [id, setId] = useState(null);
+  const [operationType, setOperationType] = useState(null);
+  const [editProduct, setEditProduct] = useState(null);
+  const history = useHistory();
+  useEffect(() => {
+    history.push("/");
+    fetchProducts();
+  }, []);
 
   const limitHandler = (e) => {
     setLimit(+e.target.value);
@@ -20,17 +31,43 @@ const Products = (props) => {
     setActivePage(page);
   };
 
-  const { loading, data, error } = useQuery(GET_PRODUCTS, {
-    variables: { page: activePage, limit },
-    onCompleted(data) {
-      props.storeProducts(data.getProducts.products);
-      props.storePaginationInfo(data.getProducts.paginationInfo);
-    },
-    onError(error) {
-      // props.storeError(data.getProducts);
-      console.log(error);
-    },
-  });
+  const setModalContent = (data) => {
+    setModalOpen(true);
+    setId(data.id);
+    setOperationType(data.type);
+    if (data.type === "edit") {
+      const products = [...props.products];
+      setEditProduct(products.find((p) => p._id === data.id));
+    }
+  };
+
+  const closeModal = () => {
+    console.log(2);
+    history.push("/");
+    setModalOpen(false);
+    setId(null);
+    setOperationType(null);
+  };
+
+  const confirmDeleted = () => {
+    console.log(1);
+    closeModal();
+  };
+
+  const [fetchProducts, { loading, data, error, refetch }] = useLazyQuery(
+    GET_PRODUCTS,
+    {
+      variables: { page: activePage, limit },
+      onCompleted(data) {
+        props.storeProducts(data.getProducts.products);
+        props.storePaginationInfo(data.getProducts.paginationInfo);
+      },
+      onError(error) {
+        // props.storeError(data.getProducts);
+        console.log(error);
+      },
+    }
+  );
 
   return (
     <>
@@ -127,11 +164,26 @@ const Products = (props) => {
                   </div>
                 </div>
               )}
-              <div className="products-container">
-                {props.products.map((product, index) => (
-                  <Product key={index} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="products-container">
+                  {props.products.map((product, index) => (
+                    <Product
+                      key={index}
+                      product={product}
+                      setModalContent={(data) => setModalContent(data)}
+                    />
+                  ))}
+                </div>
+                {isModalOpen && (
+                  <ProductCreation
+                    id={id}
+                    operationType={operationType}
+                    editProduct={editProduct}
+                    confirmDeleted={confirmDeleted}
+                    closeModal={closeModal}
+                  />
+                )}
+              </>
             </>
           ) : (
             <p>No products found</p>
