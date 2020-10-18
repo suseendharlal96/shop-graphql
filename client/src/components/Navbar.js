@@ -35,6 +35,7 @@ const Navbar = (props) => {
             className={
               location.pathname === "/" ||
               location.pathname.search("/delete") !== -1 ||
+              location.pathname.search("/add") !== -1 ||
               location.pathname.search("/edit") !== -1
                 ? "active"
                 : ""

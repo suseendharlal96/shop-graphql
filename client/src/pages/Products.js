@@ -49,25 +49,40 @@ const Products = (props) => {
     setOperationType(null);
   };
 
-  const confirmDeleted = () => {
-    console.log(1);
+  const operationDone = () => {
+    fetchProducts();
     closeModal();
   };
 
-  const [fetchProducts, { loading, data, error, refetch }] = useLazyQuery(
-    GET_PRODUCTS,
-    {
-      variables: { page: activePage, limit },
-      onCompleted(data) {
-        props.storeProducts(data.getProducts.products);
-        props.storePaginationInfo(data.getProducts.paginationInfo);
-      },
-      onError(error) {
-        // props.storeError(data.getProducts);
-        console.log(error);
-      },
-    }
-  );
+  const confirmAdded = () => {
+    fetchProducts();
+    closeModal();
+  };
+
+  const confirmEdited = () => {
+    console.log("edit");
+    fetchProducts();
+    closeModal();
+  };
+
+  const addProduct = () => {
+    history.push("/add-product");
+    setOperationType("add");
+    setModalOpen(true);
+  };
+
+  const [fetchProducts, { loading }] = useLazyQuery(GET_PRODUCTS, {
+    variables: { page: activePage, limit },
+    onCompleted(data) {
+      props.storeProducts(data.getProducts.products);
+      props.storePaginationInfo(data.getProducts.paginationInfo);
+    },
+    onError(error) {
+      // props.storeError(data.getProducts);
+      console.log(error);
+    },
+    fetchPolicy: "cache-and-network",
+  });
 
   return (
     <>
@@ -90,6 +105,7 @@ const Products = (props) => {
                     length: props.paginationInfo.totalPages,
                   }).map((_, index) => (
                     <button
+                      key={index}
                       disabled={activePage === index + 1}
                       className="btn-page"
                       onClick={() => activePageHandler(index + 1)}
@@ -107,6 +123,7 @@ const Products = (props) => {
                   )}
                 </>
               </div>
+
               <div className="limit">
                 <select value={limit} onChange={limitHandler}>
                   <option value="2">2</option>
@@ -155,6 +172,16 @@ const Products = (props) => {
                       )}
                     </>
                   </div>
+                  {props.token && (
+                    <div className="create-new">
+                      <button
+                        data-tooltip="Add new product"
+                        onClick={addProduct}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
                   <div className="limit">
                     <select value={limit} onChange={limitHandler}>
                       <option value="2">2</option>
@@ -179,7 +206,7 @@ const Products = (props) => {
                     id={id}
                     operationType={operationType}
                     editProduct={editProduct}
-                    confirmDeleted={confirmDeleted}
+                    operationDone={operationDone}
                     closeModal={closeModal}
                   />
                 )}
@@ -213,6 +240,7 @@ const mapStateToProps = (state) => {
   return {
     products: state.productReducer.products,
     paginationInfo: state.productReducer.paginationInfo,
+    token: state.authReducer.token,
   };
 };
 

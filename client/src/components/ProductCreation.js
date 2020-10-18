@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 
 import "./ProductCreation.scss";
+import { productFragment } from "../util/productFragment";
 
 const ProductCreation = ({
   id,
   operationType,
   closeModal,
   editProduct,
-  confirmDeleted,
+  operationDone,
 }) => {
   const [form, setForm] = useState({
     name: "",
@@ -17,8 +18,18 @@ const ProductCreation = ({
     description: "",
   });
 
+  useEffect(() => {
+    if (editProduct) {
+      setForm(editProduct);
+    }
+  }, [editProduct]);
+
   const changeInputHandler = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    let value = e.target.value;
+    if (e.target.name === "price") {
+      value = +e.target.value;
+    }
+    setForm({ ...form, [e.target.name]: value });
   };
 
   const [deleteProduct, { loading: deleteLoading }] = useMutation(
@@ -26,7 +37,28 @@ const ProductCreation = ({
     {
       onCompleted(data) {
         console.log(data);
-        confirmDeleted();
+        operationDone();
+      },
+      onError(err) {
+        console.log(err);
+      },
+    }
+  );
+
+  const [createProduct, { loading }] = useMutation(ADD_PRODUCT, {
+    onCompleted(data) {
+      operationDone();
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+
+  const [updateProduct, { loading: editLoading }] = useMutation(
+    UPDATE_PRODUCT,
+    {
+      onCompleted(data) {
+        operationDone();
       },
       onError(err) {
         console.log(err);
@@ -36,6 +68,29 @@ const ProductCreation = ({
 
   const deleteProd = () => {
     deleteProduct({ variables: { id } });
+  };
+
+  const createProd = () => {
+    createProduct({
+      variables: {
+        name: form.name,
+        price: form.price,
+        image: form.image,
+        description: form.description,
+      },
+    });
+  };
+
+  const updateProd = () => {
+    updateProduct({
+      variables: {
+        id: editProduct._id,
+        name: form.name,
+        price: form.price,
+        image: form.image,
+        description: form.description,
+      },
+    });
   };
 
   return (
@@ -54,9 +109,7 @@ const ProductCreation = ({
               type="text"
               name="name"
               id="name"
-              value={
-                editProduct && editProduct.name ? editProduct.name : form.name
-              }
+              value={form.name}
               onChange={changeInputHandler}
             />
           </div>
@@ -67,11 +120,7 @@ const ProductCreation = ({
               type="number"
               name="price"
               id="price"
-              value={
-                editProduct && editProduct.price
-                  ? editProduct.price
-                  : form.price
-              }
+              value={form.price}
               onChange={changeInputHandler}
             />
           </div>
@@ -82,11 +131,7 @@ const ProductCreation = ({
               type="text"
               name="image"
               id="image"
-              value={
-                editProduct && editProduct.image
-                  ? editProduct.image
-                  : form.image
-              }
+              value={form.image}
               onChange={changeInputHandler}
             />
           </div>
@@ -98,11 +143,7 @@ const ProductCreation = ({
               rows="10"
               cols="20"
               id="description"
-              value={
-                editProduct && editProduct.description
-                  ? editProduct.description
-                  : form.description
-              }
+              value={form.description}
               onChange={changeInputHandler}
             />
           </div>
@@ -116,7 +157,19 @@ const ProductCreation = ({
             <button className="btn-cancel" onClick={closeModal}>
               Cancel
             </button>
-            <button className="btn-cart">Save</button>
+            <button
+              type="button"
+              className="btn-cart"
+              onClick={editProduct ? updateProd : createProd}
+            >
+              {editProduct
+                ? editLoading
+                  ? "Saving.."
+                  : "Save"
+                : loading
+                ? "Creating.."
+                : "Create"}
+            </button>
           </div>
         </form>
       ) : (
@@ -142,6 +195,46 @@ const DELETE_PRODUCT = gql`
   mutation deleteProduct($id: ID!) {
     deleteProduct(id: $id)
   }
+`;
+
+const ADD_PRODUCT = gql`
+  mutation addProduct(
+    $name: String!
+    $price: Int!
+    $image: String!
+    $description: String!
+  ) {
+    addProduct(
+      name: $name
+      price: $price
+      image: $image
+      description: $description
+    ) {
+      ...productInfo
+    }
+  }
+  ${productFragment}
+`;
+
+const UPDATE_PRODUCT = gql`
+  mutation updateProd(
+    $id: ID!
+    $name: String!
+    $image: String!
+    $price: Int!
+    $description: String!
+  ) {
+    updateProduct(
+      id: $id
+      name: $name
+      image: $image
+      price: $price
+      description: $description
+    ) {
+      ...productInfo
+    }
+  }
+  ${productFragment}
 `;
 
 export default ProductCreation;

@@ -14,6 +14,7 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={Products} />
           <Route path="/auth" component={Auth} />
+          <Route path="/add-product" component={Products} />
           <Route path="/delete-product/:id" component={Products} />
           <Route path="/edit-product/:id" component={Products} />
           <Redirect from="**" to="/" />

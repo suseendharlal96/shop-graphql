@@ -104,6 +104,7 @@ module.exports = {
       }
     },
     deleteProduct: async (_, { id }, { loggedUser }) => {
+      console.log(loggedUser)
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
