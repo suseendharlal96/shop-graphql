@@ -48,7 +48,7 @@ const Navbar = (props) => {
             <>
               <li
                 className={location.pathname === "/cart" ? "active" : ""}
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/cart")}
               >
                 Cart
               </li>

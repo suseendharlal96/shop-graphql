@@ -1,20 +1,20 @@
 const userResolver = require("./user");
 const productResolver = require("./product");
 const cartResolver = require("./cart");
+const orderResolver = require("./order");
 
 const resolvers = {
   Query: {
     ...productResolver.Query,
     ...userResolver.Query,
     ...cartResolver.Query,
+    ...orderResolver.Query,
   },
-  // Product: {
-  //   ...productResolver.Product,
-  // },
   Mutation: {
     ...productResolver.Mutation,
     ...userResolver.Mutation,
     ...cartResolver.Mutation,
+    ...orderResolver.Mutation,
   },
 };
 

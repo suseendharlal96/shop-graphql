@@ -1,4 +1,5 @@
 import React from "react";
+import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -10,13 +11,21 @@ const Product = ({ product, setModalContent, ...props }) => {
     history.push(`/delete-product/${product._id}`);
     setModalContent({ type: "delete", id: product._id });
   };
+
   const edit = () => {
     history.push(`/edit-product/${product._id}`);
     setModalContent({ type: "edit", id: product._id });
   };
-  const addCart = () => {
-    console.log("cart");
-  };
+
+  const [addToCart, { loading }] = useMutation(ADD_CART, {
+    onCompleted(data) {
+      alert("Product added to cart");
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+
   return (
     <>
       <div className="product-container">
@@ -37,8 +46,13 @@ const Product = ({ product, setModalContent, ...props }) => {
                   </button>
                 </>
               )}
-              <button onClick={addCart} className="btn-cart">
-                Add to cart
+              <button
+                onClick={() =>
+                  addToCart({ variables: { prodId: product._id } })
+                }
+                className="btn-cart"
+              >
+                {loading ? "Adding.." : "Add to cart"}
               </button>
             </>
           )}
@@ -53,5 +67,11 @@ const mapStateToProps = (state) => {
     id: state.authReducer.id,
   };
 };
+
+const ADD_CART = gql`
+  mutation addToCart($prodId: ID!) {
+    addToCart(prodId: $prodId)
+  }
+`;
 
 export default connect(mapStateToProps)(Product);

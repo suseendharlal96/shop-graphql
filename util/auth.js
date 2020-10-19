@@ -12,6 +12,7 @@ module.exports = (context) => {
     console.log(token);
     console.log();
     jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
+      console.log(err);
       context.loggedUser = decodedToken;
     });
   }

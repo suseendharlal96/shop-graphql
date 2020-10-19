@@ -1,4 +1,4 @@
-const { AuthenticationError } = require("apollo-server");
+const { AuthenticationError, UserInputError } = require("apollo-server");
 
 const Cart = require("../model/Cart");
 const Product = require("../model/Product");
@@ -12,9 +12,8 @@ module.exports = {
           error: "unauth",
         });
       }
-      const cart = await Cart.find({ userId: loggedUser.id });
+      const cart = await Cart.findOne({ userId: loggedUser.id });
       console.log(cart);
-      console.log(cart.products);
       return cart ? cart : null;
     },
   },
@@ -45,12 +44,35 @@ module.exports = {
       } else {
         console.log(product);
         console.log("new");
-        await Cart.create({
+        const newCart = await Cart.create({
           userId: user,
-          products: product,
+          products: [],
         });
+        newCart.products.push(product);
+        newCart.save();
+        console.log(newCart);
       }
       return "Added to cart";
+    },
+    removeFromCart: async (_, { prodId }, { loggedUser }) => {
+      if (!loggedUser) {
+        throw new AuthenticationError("unauthenticated", {
+          error: "unauth",
+        });
+      }
+      const product = await Product.findById(prodId);
+      console.log("p", product);
+      const cart = await Cart.findOne({ userId: loggedUser.id });
+      if (cart) {
+        const cIndex = cart.products.findIndex((p) => p._id === prodId);
+        if (cIndex !== -1) {
+          cart.products.splice(cIndex, 1);
+          cart.save();
+          return "item removed from cart";
+        }
+      } else {
+        throw new UserInputError("Not found", { errors: "Product not found" });
+      }
     },
   },
 };

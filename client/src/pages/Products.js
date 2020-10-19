@@ -42,7 +42,6 @@ const Products = (props) => {
   };
 
   const closeModal = () => {
-    console.log(2);
     history.push("/");
     setModalOpen(false);
     setId(null);
@@ -50,17 +49,6 @@ const Products = (props) => {
   };
 
   const operationDone = () => {
-    fetchProducts();
-    closeModal();
-  };
-
-  const confirmAdded = () => {
-    fetchProducts();
-    closeModal();
-  };
-
-  const confirmEdited = () => {
-    console.log("edit");
     fetchProducts();
     closeModal();
   };
@@ -175,6 +163,7 @@ const Products = (props) => {
                   {props.token && (
                     <div className="create-new">
                       <button
+                        className="new-prod"
                         data-tooltip="Add new product"
                         onClick={addProduct}
                       >

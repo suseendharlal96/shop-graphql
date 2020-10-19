@@ -34,14 +34,24 @@ const typeDefs = gql`
 
   type Cart {
     _id: ID!
-    userId: ID!
-    products: [Product]!
+    userId: ID
+    products: [Product]
+  }
+
+  input ProductInput {
+    id: ID!
+    name: String!
+    price: Int!
+    image: String!
+    description: String!
+    quantity: Int!
   }
 
   type Query {
     getProducts(page: Int!, limit: Int!): ProductData!
     signin(email: String!, password: String!): User!
-    getCart: [Cart]
+    getCart: Cart
+    getOrders: Cart
   }
 
   type Mutation {
@@ -65,6 +75,10 @@ const typeDefs = gql`
     deleteProduct(id: ID!): String!
 
     addToCart(prodId: ID!): String!
+
+    removeFromCart(prodId: ID!): String!
+
+    pay(product: ProductInput!): String!
   }
 `;
 

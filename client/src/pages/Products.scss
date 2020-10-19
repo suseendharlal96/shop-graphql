@@ -28,15 +28,14 @@
   cursor: pointer;
   [data-tooltip] {
     font-size: 1rem;
-    position: relative;
   }
   [data-tooltip]:hover::after {
     content: attr(data-tooltip);
     position: absolute;
     background-color: royalblue;
-    padding: 1rem;
-    bottom: 22px;
-    left: 30px;
+    top: 55px;
+    padding: 0.5rem;
+    margin-left: 20px;
     border-radius: 5px;
     color: wheat;
   }

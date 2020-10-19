@@ -37,7 +37,8 @@ const Auth = (props) => {
       props.storeAuthData(data.signin);
     },
     onError(err) {
-      console.log(err.graphQLErrors);
+      console.log(err.graphQLErrors[0]);
+      setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
@@ -65,6 +66,9 @@ const Auth = (props) => {
   return (
     <div className="auth-form">
       <h2>{isSignup ? "Signup" : "Signin"}</h2>
+      {errors && errors.error && (
+        <p className="invalid">{errors && errors.error}</p>
+      )}
       <form onSubmit={submitForm}>
         <div>
           <label htmlFor="email" required>
@@ -80,7 +84,9 @@ const Auth = (props) => {
             onChange={handleInputChange}
           />
         </div>
-        {errors.email && <p className="invalid">{errors.email}</p>}
+        {errors && errors.email && (
+          <p className="invalid">{errors && errors.email}</p>
+        )}
         <div>
           <label htmlFor="password" required>
             Password
@@ -94,7 +100,9 @@ const Auth = (props) => {
             onChange={handleInputChange}
           />
         </div>
-        {errors.password && <p className="invalid">{errors.password}</p>}
+        {errors && errors.password && (
+          <p className="invalid">{errors && errors.password}</p>
+        )}
         {isSignup && (
           <>
             <div>
@@ -110,8 +118,8 @@ const Auth = (props) => {
                 onChange={handleInputChange}
               />
             </div>
-            {errors.confirmPassword && (
-              <p className="invalid">{errors.confirmPassword}</p>
+            {errors && errors.confirmPassword && (
+              <p className="invalid">{errors && errors.confirmPassword}</p>
             )}
           </>
         )}

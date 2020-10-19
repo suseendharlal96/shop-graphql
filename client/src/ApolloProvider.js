@@ -5,18 +5,23 @@ import {
   InMemoryCache,
   createHttpLink,
 } from "@apollo/client";
-
+import { setContext } from "apollo-link-context";
 import App from "./App";
 
 const httpLink = createHttpLink({
   uri: "http://localhost:5000",
-  headers: {
-    authorization: `Bearer ${localStorage.getItem("token")}` || "",
-  },
+});
+
+const authLink = setContext(() => {
+  return {
+    headers: {
+      authorization: `Bearer ${localStorage.getItem("token")}` || "",
+    },
+  };
 });
 
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 const ApolloProvider = () => {

@@ -2,8 +2,12 @@ const { UserInputError } = require("apollo-server");
 
 module.exports = {
   validateSignup: (email, password, confirmPassword) => {
-    if (email === "" || password === "" || confirmPassword === "") {
-      if (email === "") {
+    if (
+      email.trim() === "" ||
+      password.trim() === "" ||
+      confirmPassword.trim() === ""
+    ) {
+      if (email.trim() === "") {
         throw new UserInputError("email is required", {
           errors: {
             email: "Required",
@@ -19,21 +23,21 @@ module.exports = {
           });
         }
       }
-      if (password === "") {
+      if (password.trim() === "") {
         throw new UserInputError("password is required", {
           errors: {
             password: "Required.",
           },
         });
       }
-      if (confirmPassword === "") {
+      if (confirmPassword.trim() === "") {
         throw new UserInputError("confirmPassword is required", {
           errors: {
             confirmPassword: "Required.",
           },
         });
       }
-    } else if (password !== confirmPassword) {
+    } else if (password.trim() !== confirmPassword.trim()) {
       throw new UserInputError("Password mismatch", {
         errors: {
           confirmPassword: "Password mismatch",
@@ -42,8 +46,8 @@ module.exports = {
     }
   },
   validateSignin: (email, password) => {
-    if (email === "" || password === "") {
-      if (email === "") {
+    if (email.trim() === "" || password.trim() === "") {
+      if (email.trim() === "") {
         throw new UserInputError("email is required", {
           errors: {
             email: "Required.",
@@ -59,7 +63,7 @@ module.exports = {
           });
         }
       }
-      if (password === "") {
+      if (password.trim() === "") {
         throw new UserInputError("password is required", {
           errors: {
             password: "Required.",
