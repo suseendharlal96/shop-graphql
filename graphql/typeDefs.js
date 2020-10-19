@@ -38,6 +38,22 @@ const typeDefs = gql`
     products: [Product]
   }
 
+  type Order {
+    _id: String!
+    name: String!
+    price: Int!
+    image: String!
+    description: String!
+    quantity: Int!
+    date: String!
+  }
+
+  type OrderType {
+    _id: ID!
+    userId: ID
+    products: [Order]
+  }
+
   input ProductInput {
     id: ID!
     name: String!
@@ -51,7 +67,7 @@ const typeDefs = gql`
     getProducts(page: Int!, limit: Int!): ProductData!
     signin(email: String!, password: String!): User!
     getCart: Cart
-    getOrders: Cart
+    getOrders: OrderType
   }
 
   type Mutation {

@@ -10,9 +10,9 @@ const orderSchema = new Schema({
       image: { type: String, required: true },
       quantity: { type: Number, default: 1 },
       description: { type: String, required: true },
+      date: { type: String, required: true },
     },
   ],
-  date: { type: String, required: true },
 });
 
 module.exports = model("Order", orderSchema);

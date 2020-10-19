@@ -5,6 +5,7 @@ import Products from "./pages/Products";
 import Auth from "./pages/Auth";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 import "./App.css";
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
             <Route path="/" exact component={Products} />
             <Route path="/auth" component={Auth} />
             <Route path="/cart" component={Cart} />
+            <Route path="/orders" component={Orders} />
             <Route path="/add-product" component={Products} />
             <Route path="/delete-product/:id" component={Products} />
             <Route path="/edit-product/:id" component={Products} />

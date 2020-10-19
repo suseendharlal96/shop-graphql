@@ -29,8 +29,7 @@ module.exports = {
       const cart = await Cart.findOne({ userId: loggedUser.id });
       if (order) {
         console.log("old");
-        order.products.push(product);
-        order.date = new Date().toISOString();
+        order.products.push({ ...product, date: new Date().toISOString() });
         order.save();
         const cIndex = cart.products.findIndex((c) => c._id === product.id);
         cart.products.splice(cIndex, 1);
@@ -41,9 +40,8 @@ module.exports = {
         const newOrder = await Order.create({
           userId: user,
           products: [],
-          date: new Date().toISOString(),
         });
-        newOrder.products.push(product);
+        newOrder.products.push({ ...product, date: new Date().toISOString() });
         newOrder.save();
         const cIndex = cart.products.findIndex((c) => c._id === product.id);
         cart.products.splice(cIndex, 1);

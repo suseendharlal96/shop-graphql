@@ -50,6 +50,7 @@ const Cart = (props) => {
   const [pay, { loading: paymentLoading }] = useMutation(PAY, {
     onCompleted(data) {
       console.log(data);
+      alert(data.pay);
       getCart();
     },
     onError(err) {
