@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { gql, useLazyQuery } from "@apollo/client";
+import dayjs from "dayjs";
 
 import "./Orders.scss";
 
@@ -36,7 +37,9 @@ const Orders = (props) => {
             {orders.map((c) => (
               <div key={c._id} className="cart-item">
                 <h2>{c.name}</h2>
-                <span>Ordered on: {c.date}</span>
+                <span>
+                  Ordered on: {dayjs(c.date).format("MMM D, YYYY h:mm A")}
+                </span>
                 <p>quantity:{c.quantity}</p>
                 <p className="price">{c.price * c.quantity}</p>
                 <img alt={c.name} src={c.image} />
