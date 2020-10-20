@@ -22,4 +22,5 @@ mongoose
   })
   .then(({ url }) => {
     console.log(`running on ${url}`);
-  });
+  })
+  .catch((err) => console.log(err));
