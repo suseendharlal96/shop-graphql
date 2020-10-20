@@ -12,7 +12,7 @@ const server = new ApolloServer({
   resolvers,
   context: auth,
 });
-const PORT = process.env.port || 5000;
+const PORT = process.env.PORT || 5000;
 const mongo = process.env.MONGO_CONFIG;
 mongoose
   .connect(mongo, { useNewUrlParser: true, useUnifiedTopology: true })
