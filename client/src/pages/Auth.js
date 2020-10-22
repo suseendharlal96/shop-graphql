@@ -7,6 +7,7 @@ import { useLazyQuery, useMutation, gql } from "@apollo/client";
 import "./Auth.scss";
 import { authFragment } from "../util/authFragment";
 import * as actions from "../store/actions/index";
+import Sample from "../components/Sample";
 
 const Auth = (props) => {
   const [isSignup, setisSignup] = useState(false);
@@ -65,6 +66,7 @@ const Auth = (props) => {
 
   return (
     <div className="auth-form">
+      {/* <Sample label="Current Time" /> */}
       <h2>{isSignup ? "Signup" : "Signin"}</h2>
       {errors && errors.error && (
         <p className="invalid">{errors && errors.error}</p>

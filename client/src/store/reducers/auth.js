@@ -9,6 +9,7 @@ const initState = {
 const authReducer = (state = initState, action) => {
   switch (action.type) {
     case actionType.STORE_AUTHDATA:
+      console.log(action.authData);
       localStorage.setItem("token", action.authData.token);
       return {
         ...state,
@@ -21,8 +22,9 @@ const authReducer = (state = initState, action) => {
       localStorage.clear();
       return {
         ...state,
-        email: "",
-        token: "",
+        email: null,
+        token: null,
+        id: null,
       };
 
     default:

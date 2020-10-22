@@ -3,19 +3,25 @@ import ReactDOM from "react-dom";
 
 import { Provider } from "react-redux";
 import { createStore, combineReducers, applyMiddleware } from "redux";
+import createSagaMiddleWare from "redux-saga";
 import logger from "redux-logger";
 
 import "./index.css";
 import productReducer from "./store/reducers/product";
 import authReducer from "./store/reducers/auth";
 import ApolloProvider from "./ApolloProvider";
+import { watchAuth, watchProduct } from "./store/sagas/index";
 
 const rootReducer = combineReducers({
   authReducer,
   productReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+const sagaMiddleware = createSagaMiddleWare();
+
+const store = createStore(rootReducer, applyMiddleware(sagaMiddleware, logger));
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchProduct);
 
 ReactDOM.render(
   <React.StrictMode>
