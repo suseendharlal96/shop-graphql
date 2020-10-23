@@ -9,7 +9,6 @@ const initState = {
 const authReducer = (state = initState, action) => {
   switch (action.type) {
     case actionType.STORE_AUTHDATA:
-      console.log(action.authData);
       localStorage.setItem("token", action.authData.token);
       return {
         ...state,
