@@ -26,6 +26,15 @@ const typeDefs = gql`
     email: String!
     token: String!
     id: ID!
+    myList: [MyList]
+  }
+
+  type MyList {
+    id: Int
+    name: String
+    date: String
+    rating: Float
+    overview: String
   }
 
   type Owner {
@@ -95,6 +104,16 @@ const typeDefs = gql`
     removeFromCart(prodId: ID!): String!
 
     pay(product: ProductInput!): String!
+
+    addToMyList(
+      id: Int!
+      name: String!
+      date: String!
+      rating: Float!
+      overview: String!
+    ): String!
+
+    removeFromMyList(id: Int!): String!
   }
 `;
 

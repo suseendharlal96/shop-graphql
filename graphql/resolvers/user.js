@@ -56,6 +56,7 @@ module.exports = {
         const user = await User.create({
           email,
           password: hashPass,
+          myList: [],
         });
         console.log("user", user);
         console.log("user", user._doc);

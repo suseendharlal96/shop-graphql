@@ -2,6 +2,7 @@ const userResolver = require("./user");
 const productResolver = require("./product");
 const cartResolver = require("./cart");
 const orderResolver = require("./order");
+const movieResolver = require("./movie");
 
 const resolvers = {
   Query: {
@@ -15,6 +16,7 @@ const resolvers = {
     ...userResolver.Mutation,
     ...cartResolver.Mutation,
     ...orderResolver.Mutation,
+    ...movieResolver.Mutation,
   },
 };
 
