@@ -18,7 +18,7 @@ module.exports = {
   Mutation: {
     addToMyList: async (
       _,
-      { id, name, date, rating, overview },
+      { id, name, date, rating, overview, image },
       { loggedUser }
     ) => {
       if (!loggedUser) {
@@ -30,7 +30,7 @@ module.exports = {
       if (user && user.myList) {
         const index = user.myList.findIndex((list) => list.id == id);
         if (index === -1) {
-          user.myList.push({ id, name, date, rating, overview });
+          user.myList.push({ id, name, date, rating, overview, image });
           user.save();
           return "Added to my list.";
         } else {

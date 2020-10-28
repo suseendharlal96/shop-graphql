@@ -10,6 +10,7 @@ const userSchema = new Schema({
       date: { type: String },
       overview: { type: String },
       rating: { type: Number },
+      image: { type: String },
     },
   ],
 });

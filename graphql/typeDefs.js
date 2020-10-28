@@ -35,6 +35,7 @@ const typeDefs = gql`
     date: String
     rating: Float
     overview: String
+    image: String
   }
 
   type Owner {
@@ -112,6 +113,7 @@ const typeDefs = gql`
       date: String!
       rating: Float!
       overview: String!
+      image: String!
     ): String!
 
     removeFromMyList(id: Int!): String!
