@@ -77,6 +77,7 @@ const typeDefs = gql`
     signin(email: String!, password: String!): User!
     getCart: Cart
     getOrders: OrderType
+    getMyList: [MyList]!
   }
 
   type Mutation {

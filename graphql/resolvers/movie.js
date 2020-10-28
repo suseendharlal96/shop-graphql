@@ -2,6 +2,19 @@ const { AuthenticationError } = require("apollo-server");
 const User = require("../model/User");
 
 module.exports = {
+  Query: {
+    getMyList: async (_, __, { loggedUser }) => {
+      if (!loggedUser) {
+        throw new AuthenticationError("unauthenticated", {
+          error: "unauth",
+        });
+      }
+      const user = await User.findById(loggedUser.id);
+      if (user && user.myList) {
+        return user.myList;
+      }
+    },
+  },
   Mutation: {
     addToMyList: async (
       _,
@@ -15,9 +28,14 @@ module.exports = {
       }
       const user = await User.findById(loggedUser.id);
       if (user && user.myList) {
-        user.myList.push({ id, name, date, rating, overview });
-        user.save();
-        return "Added to my list";
+        const index = user.myList.findIndex((list) => list.id == id);
+        if (index === -1) {
+          user.myList.push({ id, name, date, rating, overview });
+          user.save();
+          return "Added to my list.";
+        } else {
+          return "Already exists in my list.";
+        }
       }
     },
     removeFromMyList: async (_, { id }, { loggedUser }) => {

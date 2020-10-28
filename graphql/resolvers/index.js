@@ -10,6 +10,7 @@ const resolvers = {
     ...userResolver.Query,
     ...cartResolver.Query,
     ...orderResolver.Query,
+    ...movieResolver.Query,
   },
   Mutation: {
     ...productResolver.Mutation,
