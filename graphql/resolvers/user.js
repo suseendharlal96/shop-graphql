@@ -15,7 +15,9 @@ module.exports = {
         const oldUser = await User.findOne({ email });
         if (!oldUser) {
           throw new UserInputError("User doesn't exist.Try creating one.", {
-            error: "User doesn't exist.Try creating one.",
+            errors: {
+              error: "User doesn't exist.Try creating one.",
+            },
           });
         }
         console.log(oldUser);

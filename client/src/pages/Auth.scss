@@ -74,4 +74,12 @@ button:disabled {
   cursor: no-drop;
   background-color: silver;
   color: #000000;
+  border-color: #000000;
+}
+
+button:disabled:hover {
+  cursor: no-drop;
+  background-color: silver;
+  color: #000000;
+  border-color: #000000;
 }

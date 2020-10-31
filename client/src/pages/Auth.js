@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
+import { Form, Field } from "react-final-form";
 
 import { useLazyQuery, useMutation, gql } from "@apollo/client";
 
 import "./Auth.scss";
 import { authFragment } from "../util/authFragment";
 import * as actions from "../store/actions/index";
-import Sample from "../components/Sample";
+// import Sample from "../components/Sample";
 
 const Auth = (props) => {
   const [isSignup, setisSignup] = useState(false);
@@ -55,12 +56,39 @@ const Auth = (props) => {
     },
   });
 
-  const submitForm = (e) => {
-    e.preventDefault();
+  const submitForm = (values) => {
+    // e.preventDefault();
     if (!isSignup) {
-      login({ variables: form });
+      login({ variables: values });
     } else {
-      signup({ variables: form });
+      signup({ variables: values });
+    }
+  };
+
+  const emailValidate = (value) => {
+    const regEx = /^([0-9a-zA-Z]([-.w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-w]*[0-9a-zA-Z].)+[a-zA-Z]{2,9})$/;
+    if (!value) {
+      return "Required Field.";
+    } else if (!value.match(regEx)) {
+      return "Invalid Email.";
+    }
+  };
+
+  let pass;
+  const passwordValidate = (value) => {
+    pass = value;
+    if (!value) {
+      return "Required Field.";
+    } else if (value && value.length < 6) {
+      return "Must be atleast 6 characters.";
+    }
+  };
+
+  const confirmPasswordValidate = (value) => {
+    if (!value) {
+      return "Required Field.";
+    } else if (pass && pass !== value) {
+      return "Password mismatch.";
     }
   };
 
@@ -71,81 +99,108 @@ const Auth = (props) => {
       {errors && errors.error && (
         <p className="invalid">{errors && errors.error}</p>
       )}
-      <form onSubmit={submitForm}>
-        <div>
-          <label htmlFor="email" required>
-            Email
-          </label>
-          <input
-            type="text"
-            name="email"
-            autoFocus
-            className="form-control"
-            value={form.email}
-            id="email"
-            onChange={handleInputChange}
-          />
-        </div>
-        {errors && errors.email && (
-          <p className="invalid">{errors && errors.email}</p>
-        )}
-        <div>
-          <label htmlFor="password" required>
-            Password
-          </label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            id="password"
-            value={form.password}
-            onChange={handleInputChange}
-          />
-        </div>
-        {errors && errors.password && (
-          <p className="invalid">{errors && errors.password}</p>
-        )}
-        {isSignup && (
-          <>
-            <div>
-              <label htmlFor="confirmPassword" required>
-                Confirm Password
-              </label>
-              <input
-                className="form-control"
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                value={form.confirmPassword}
-                onChange={handleInputChange}
-              />
-            </div>
-            {errors && errors.confirmPassword && (
-              <p className="invalid">{errors && errors.confirmPassword}</p>
+      <Form
+        onSubmit={submitForm}
+        render={({ handleSubmit, form, invalid, values }) => (
+          <form onSubmit={handleSubmit}>
+            <Field name="email" validate={emailValidate}>
+              {({ input, meta }) => (
+                <div>
+                  <label htmlFor="email" required>
+                    Email
+                  </label>
+                  <input
+                    type="text"
+                    {...input}
+                    autoFocus
+                    className="form-control"
+                    placeholder="Email"
+                    id="email"
+                  />
+                  {meta.error && meta.touched && (
+                    <p className="invalid">{meta.error}</p>
+                  )}
+                  {errors && errors.email && (
+                    <p className="invalid">{errors && errors.email}</p>
+                  )}
+                </div>
+              )}
+            </Field>
+            <Field name="password" validate={passwordValidate}>
+              {({ input, meta }) => (
+                <div>
+                  <label htmlFor="password" required>
+                    Password
+                  </label>
+                  <input
+                    className="form-control"
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    {...input}
+                  />
+                  {meta.touched && meta.error && (
+                    <p className="invalid">{meta.error}</p>
+                  )}
+                  {errors && errors.password && (
+                    <p className="invalid">{errors && errors.password}</p>
+                  )}
+                </div>
+              )}
+            </Field>
+            {isSignup && (
+              <Field name="confirmPassword" validate={confirmPasswordValidate}>
+                {({ input, meta }) => (
+                  <div>
+                    <label htmlFor="confirmPassword" required>
+                      Confirm Password
+                    </label>
+                    <input
+                      className="form-control"
+                      type="password"
+                      id="confirmPassword"
+                      placeholder="Retype password"
+                      {...input}
+                    />
+                    {meta.touched && meta.error && (
+                      <p className="invalid">{meta.error}</p>
+                    )}
+                    {errors && errors.confirmPassword && (
+                      <p className="invalid">
+                        {errors && errors.confirmPassword}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </Field>
             )}
-          </>
+            {errors && errors.error && (
+              <p className="invalid">{errors.error}</p>
+            )}
+            <button
+              className="auth-button secondary"
+              type="button"
+              disabled={loading}
+              onClick={() => form.reset && setisSignup(!isSignup)}
+            >
+              Switch to {isSignup ? "Signin" : "Signup"}
+            </button>
+            <button
+              className="auth-button primary"
+              disabled={invalid}
+              type="submit"
+            >
+              {isSignup
+                ? signupLoading
+                  ? "Signing up.."
+                  : "Signup"
+                : loading
+                ? "Signing in.."
+                : "Signin"}
+            </button>
+          </form>
         )}
-        {/* <p v-if="errors && errors.error" className="invalid">
-        { isSignup ? errors.error : "Invalid credentials" }
-      </p> */}
-        <button
-          className="auth-button secondary"
-          type="button"
-          disabled={loading}
-          onClick={changeMode}
-        >
-          Switch to {isSignup ? "Signin" : "Signup"}
-        </button>
-        <button className="auth-button primary" type="submit">
-          {isSignup
-            ? signupLoading
-              ? "Signing up.."
-              : "Signup"
-            : loading
-            ? "Signing in.."
-            : "Signin"}
-        </button>
-      </form>
+      ></Form>
     </div>
   );
 };
