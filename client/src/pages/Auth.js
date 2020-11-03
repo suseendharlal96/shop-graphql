@@ -101,7 +101,7 @@ const Auth = (props) => {
       )}
       <Form
         onSubmit={submitForm}
-        render={({ handleSubmit, form, invalid, values }) => (
+        render={({ handleSubmit, form, invalid }) => (
           <form onSubmit={handleSubmit}>
             <Field name="email" validate={emailValidate}>
               {({ input, meta }) => (

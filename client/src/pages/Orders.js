@@ -15,6 +15,7 @@ const Orders = (props) => {
     } else {
       getOrders();
     }
+    window.scrollTo(0, 0);
   }, []);
 
   const [getOrders, { loading }] = useLazyQuery(GET_ORDERS, {
@@ -25,6 +26,7 @@ const Orders = (props) => {
     onError(err) {
       console.log(err);
     },
+    fetchPolicy: "cache-and-network",
   });
 
   return (
@@ -37,7 +39,7 @@ const Orders = (props) => {
             {orders.map((c) => (
               <div key={c._id} className="cart-item">
                 <h2>{c.name}</h2>
-                <span>
+                <span style={{ color: "var(--primaryText)" }}>
                   Ordered on: {dayjs(c.date).format("MMM D, YYYY h:mm A")}
                 </span>
                 <p>quantity:{c.quantity}</p>

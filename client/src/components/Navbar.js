@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as actions from "../store/actions/index";
 import "./Navbar.scss";
+import { useThemeState, useThemeDispatch } from "../context/themecontext";
 
 const Navbar = (props) => {
+  const state = useThemeState();
+  const dispatch = useThemeDispatch();
   const history = useHistory();
   const location = useLocation();
   const [showLink, setshowLink] = useState(false);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", state.theme);
+  }, [state]);
   const navigate = (path, isLogout = false) => {
     if (isLogout) {
       props.logout();
@@ -19,6 +25,13 @@ const Navbar = (props) => {
 
   const toggle = () => {
     setshowLink(!showLink);
+  };
+
+  const themeHandler = () => {
+    state.theme === "light"
+      ? dispatch({ type: "dark" })
+      : dispatch({ type: "light" });
+    setshowLink(false);
   };
 
   return (
@@ -74,6 +87,9 @@ const Navbar = (props) => {
               Signin/Signup
             </li>
           )}
+          <li onClick={() => themeHandler()}>
+            {state.theme === "light" ? "Dark theme" : "Light theme"}
+          </li>
         </ul>
       </div>
     </nav>

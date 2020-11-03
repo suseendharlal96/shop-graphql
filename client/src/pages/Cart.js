@@ -15,6 +15,7 @@ const Cart = (props) => {
     } else {
       getCart();
     }
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {

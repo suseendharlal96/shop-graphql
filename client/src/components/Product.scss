@@ -4,15 +4,21 @@
   justify-content: center;
   align-items: center;
   width: 325px;
-  border: 1px solid #000000;
+  border: 1px solid var(--primaryText);
   border-radius: 4px;
-  box-shadow: 2px 3px;
+  box-shadow: 2px 3px var(--primaryText);
   padding: 5px;
   margin: 0 20px 20px 0px;
 }
 p {
   margin: 0;
+  color: var(--primaryText);
 }
+
+h2 {
+  color: var(--primaryText);
+}
+
 .price::before {
   content: "₹";
 }

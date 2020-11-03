@@ -13,3 +13,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+html.color-theme-in-transition,
+html.color-theme-in-transition *,
+html.color-theme-in-transition *:before,
+html.color-theme-in-transition *:after {
+  transition: all 750ms !important;
+  transition-delay: 0 !important;
+}
+
+html {
+  /* global colors */
+  --primaryBg: beige;
+  --primaryText: #212121;
+}
+
+html[data-theme="dark"] {
+  /* global colors */
+  --primaryBg: black;
+  --primaryText: rgb(222, 184, 135);
+}

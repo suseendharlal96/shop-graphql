@@ -21,6 +21,7 @@ const Products = (props) => {
   useEffect(() => {
     history.push("/");
     fetchProducts();
+    window.scrollTo(0, 0);
   }, []);
 
   const limitHandler = (e) => {
