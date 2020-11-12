@@ -82,8 +82,12 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    # for vue-apollo 
+    signin(email: String!, password: String!): User! 
+    
     signup(email: String!, password: String!, confirmPassword: String!): User!
 
+    # for vue-apollo 
     getProducts(page: Int!, limit: Int!): ProductData!
     
     addProduct(
