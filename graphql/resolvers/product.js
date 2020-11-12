@@ -47,6 +47,31 @@ module.exports = {
     },
   },
   Mutation: {
+    getProducts: async (_, { page, limit }) => {
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      try {
+        let allProducts = await Product.find();
+        let products;
+        if (startIndex < allProducts.length) {
+          products = await Product.find().limit(limit).skip(startIndex);
+        } else {
+          products = [...allProducts];
+        }
+        const paginationInfo = {};
+        paginationInfo.totalPages = Math.ceil(allProducts.length / limit);
+        if (endIndex < allProducts.length) {
+          paginationInfo.nextPage = page + 1;
+        }
+        if (startIndex !== 0) {
+          paginationInfo.prevPage = page - 1;
+        }
+        console.log(paginationInfo);
+        return { products, paginationInfo };
+      } catch (err) {
+        console.log(err);
+      }
+    },
     addProduct: async (
       _,
       { name, price, image, description },
