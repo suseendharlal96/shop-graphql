@@ -50,7 +50,6 @@ const Cart = (props) => {
 
   const [pay, { loading: paymentLoading }] = useMutation(PAY, {
     onCompleted(data) {
-      console.log(data);
       alert(data.pay);
       getCart();
     },
@@ -61,7 +60,6 @@ const Cart = (props) => {
 
   const [getCart, { loading }] = useLazyQuery(GET_CART, {
     onCompleted(data) {
-      console.log(data);
       setCart(data.getCart.products);
     },
     onError(err) {
@@ -72,7 +70,6 @@ const Cart = (props) => {
 
   const [removeCart] = useMutation(REMOVE_CART, {
     onCompleted(data) {
-      console.log(data);
       getCart();
     },
     onError(err) {

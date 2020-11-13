@@ -3,10 +3,12 @@ const { AuthenticationError, UserInputError } = require("apollo-server");
 const Cart = require("../model/Cart");
 const Product = require("../model/Product");
 const User = require("../model/User");
+const auth = require("../../util/auth");
 
 module.exports = {
   Query: {
-    getCart: async (_, __, { loggedUser }) => {
+    getCart: async (_, __, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -14,7 +16,6 @@ module.exports = {
       }
       try {
         const cart = await Cart.findOne({ userId: loggedUser.id });
-        console.log(cart);
         return cart ? cart : null;
       } catch (err) {
         console.log(err);
@@ -22,7 +23,8 @@ module.exports = {
     },
   },
   Mutation: {
-    addToCart: async (_, { prodId }, { loggedUser }) => {
+    addToCart: async (_, { prodId }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -31,15 +33,11 @@ module.exports = {
       try {
         const user = await User.findById(loggedUser.id);
         const product = await Product.findById(prodId);
-        console.log("p", product);
         const cart = await Cart.findOne({ userId: loggedUser.id });
         if (cart) {
-          console.log("old");
-          console.log(cart.products);
           const existingProductIndex = cart.products.findIndex(
             (c) => c._id == prodId
           );
-          console.log(existingProductIndex);
           if (existingProductIndex !== -1) {
             cart.products[existingProductIndex].quantity++;
           } else {
@@ -47,22 +45,20 @@ module.exports = {
           }
           cart.save();
         } else {
-          console.log(product);
-          console.log("new");
           const newCart = await Cart.create({
             userId: user,
             products: [],
           });
           newCart.products.push(product);
           newCart.save();
-          console.log(newCart);
         }
         return "Added to cart";
       } catch (err) {
         console.log(err);
       }
     },
-    removeFromCart: async (_, { prodId }, { loggedUser }) => {
+    removeFromCart: async (_, { prodId }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -70,7 +66,6 @@ module.exports = {
       }
       try {
         const product = await Product.findById(prodId);
-        console.log("p", product);
         const cart = await Cart.findOne({ userId: loggedUser.id });
         if (cart) {
           const cIndex = cart.products.findIndex((p) => p._id === prodId);

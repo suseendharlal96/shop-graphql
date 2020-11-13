@@ -2,6 +2,7 @@ const { AuthenticationError, UserInputError } = require("apollo-server");
 
 const Product = require("../model/Product");
 const Cart = require("../model/Cart");
+const auth = require("../../util/auth");
 
 const validateProduct = (name, price, image, description) => {
   if (name === "") {
@@ -39,7 +40,6 @@ module.exports = {
         if (startIndex !== 0) {
           paginationInfo.prevPage = page - 1;
         }
-        console.log(paginationInfo);
         return { products, paginationInfo };
       } catch (err) {
         console.log(err);
@@ -66,17 +66,13 @@ module.exports = {
         if (startIndex !== 0) {
           paginationInfo.prevPage = page - 1;
         }
-        console.log(paginationInfo);
         return { products, paginationInfo };
       } catch (err) {
         console.log(err);
       }
     },
-    addProduct: async (
-      _,
-      { name, price, image, description },
-      { loggedUser }
-    ) => {
+    addProduct: async (_, { name, price, image, description }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -99,8 +95,9 @@ module.exports = {
     updateProduct: async (
       _,
       { id, name, price, image, description },
-      { loggedUser }
+      context
     ) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -138,8 +135,8 @@ module.exports = {
         console.log(err);
       }
     },
-    deleteProduct: async (_, { id }, { loggedUser }) => {
-      console.log(loggedUser);
+    deleteProduct: async (_, { id }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",

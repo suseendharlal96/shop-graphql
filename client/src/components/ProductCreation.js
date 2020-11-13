@@ -37,7 +37,6 @@ const ProductCreation = ({
     DELETE_PRODUCT,
     {
       onCompleted(data) {
-        console.log(data);
         operationDone();
       },
       onError(err) {

@@ -20,7 +20,6 @@ const Orders = (props) => {
 
   const [getOrders, { loading }] = useLazyQuery(GET_ORDERS, {
     onCompleted(data) {
-      console.log(data);
       setOrders(data.getOrders.products);
     },
     onError(err) {

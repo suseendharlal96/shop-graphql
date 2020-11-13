@@ -1,9 +1,11 @@
 const { AuthenticationError } = require("apollo-server");
 const User = require("../model/User");
+const auth = require("../../util/auth");
 
 module.exports = {
   Query: {
-    getMyList: async (_, __, { loggedUser }) => {
+    getMyList: async (_, __, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -19,8 +21,9 @@ module.exports = {
     addToMyList: async (
       _,
       { id, name, date, rating, overview, image },
-      { loggedUser }
+      context
     ) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -38,7 +41,8 @@ module.exports = {
         }
       }
     },
-    removeFromMyList: async (_, { id }, { loggedUser }) => {
+    removeFromMyList: async (_, { id }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",

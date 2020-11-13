@@ -5,12 +5,11 @@ dotenv.config();
 
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers/index");
-const auth = require("./util/auth");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: auth,
+  context: ({ req }) => ({ req }),
 });
 const PORT = process.env.PORT || 5500;
 const mongo = process.env.MONGO_CONFIG;

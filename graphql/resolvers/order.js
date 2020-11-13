@@ -3,10 +3,12 @@ const { AuthenticationError } = require("apollo-server");
 const User = require("../model/User");
 const Order = require("../model/Order");
 const Cart = require("../model/Cart");
+const auth = require("../../util/auth");
 
 module.exports = {
   Query: {
-    getOrders: async (_, __, { loggedUser }) => {
+    getOrders: async (_, __, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -21,8 +23,8 @@ module.exports = {
     },
   },
   Mutation: {
-    pay: async (_, { product }, { loggedUser }) => {
-      console.log("order", product);
+    pay: async (_, { product }, context) => {
+      const loggedUser = auth(context);
       if (!loggedUser) {
         throw new AuthenticationError("unauthenticated", {
           error: "unauth",
@@ -33,7 +35,6 @@ module.exports = {
         const order = await Order.findOne({ userId: loggedUser.id });
         const cart = await Cart.findOne({ userId: loggedUser.id });
         if (order) {
-          console.log("old");
           order.products.push({ ...product, date: new Date().toISOString() });
           order.save();
           const cIndex = cart.products.findIndex((c) => c._id === product.id);
@@ -41,7 +42,6 @@ module.exports = {
           cart.save();
           return "payment successfull";
         } else {
-          console.log("new");
           const newOrder = await Order.create({
             userId: user,
             products: [],

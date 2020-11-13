@@ -4,17 +4,20 @@ const { AuthenticationError } = require("apollo-server");
 dotenv.config();
 
 module.exports = (context) => {
-  let token;
-  if (context.req && context.req.headers.authorization) {
-    token = context.req.headers.authorization.split("Bearer ")[1];
+  const authHeader = context.req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split("Bearer ")[1];
+    if (token) {
+      try {
+        const user = jwt.verify(token, process.env.SECRET_KEY);
+        return user;
+      } catch (err) {
+        throw new AuthenticationError("Invalid/Expired Token");
+      }
+    }
+    throw new Error(
+      "Authentication token must be of type 'Bearer [yourToken]'"
+    );
   }
-  if (token) {
-    console.log(token);
-    console.log();
-    jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
-      console.log(err);
-      context.loggedUser = decodedToken;
-    });
-  }
-  return context;
+  throw new Error("Authorization token must be provided");
 };

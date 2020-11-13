@@ -34,24 +34,20 @@ const Auth = (props) => {
 
   const [login, { loading }] = useLazyQuery(SIGN_IN, {
     onCompleted(data) {
-      console.log(data);
       history.push("/");
       props.storeAuthData(data.signin);
     },
     onError(err) {
-      console.log(err.graphQLErrors[0]);
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });
 
   const [signup, { loading: signupLoading }] = useMutation(SIGN_UP, {
     onCompleted(data) {
-      console.log(data);
       history.push("/");
       props.storeAuthData(data.signup);
     },
     onError(err) {
-      console.log(err.graphQLErrors[0].extensions.errors);
       setErrors(err.graphQLErrors[0].extensions.errors);
     },
   });

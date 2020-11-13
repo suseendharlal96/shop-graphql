@@ -20,14 +20,12 @@ module.exports = {
             },
           });
         }
-        console.log(oldUser);
         const isPassMatch = await bcrpyt.compare(password, oldUser.password);
         if (!isPassMatch) {
           throw new UserInputError("Invalid credentials", {
             errors: { error: "Invalid credentials" },
           });
         }
-        // console.log(oldUser)
         const token = jwt.sign(
           {
             id: oldUser._id,
@@ -37,7 +35,6 @@ module.exports = {
           process.env.SECRET_KEY,
           { expiresIn: "1h" }
         );
-        console.log("token", token);
         return { ...oldUser._doc, id: oldUser.id, token };
       } catch (err) {
         console.log(err);
@@ -56,14 +53,12 @@ module.exports = {
             },
           });
         }
-        console.log(oldUser);
         const isPassMatch = await bcrpyt.compare(password, oldUser.password);
         if (!isPassMatch) {
           throw new UserInputError("Invalid credentials", {
             errors: { error: "Invalid credentials" },
           });
         }
-        // console.log(oldUser)
         const token = jwt.sign(
           {
             id: oldUser._id,
@@ -73,7 +68,6 @@ module.exports = {
           process.env.SECRET_KEY,
           { expiresIn: "1h" }
         );
-        console.log("token", token);
         return { ...oldUser._doc, id: oldUser.id, token };
       } catch (err) {
         console.log(err);
@@ -94,8 +88,6 @@ module.exports = {
           password: hashPass,
           myList: [],
         });
-        console.log("user", user);
-        console.log("user", user._doc);
         const token = jwt.sign(
           {
             id: user._id,
